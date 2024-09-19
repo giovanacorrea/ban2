@@ -1,0 +1,81 @@
+create table pessoa(
+	idpessoa int NOT NULL UNIQUE,
+	nome varchar(100) NOT NULL,
+	telefone varchar(100) NOT NULL, 
+	endereco varchar(100) NOT NULL,
+	primary key (idpessoa)
+);
+
+
+create table hospede(
+	idhospede int NOT NULL UNIQUE,
+	idpessoa int NOT NULL,
+	primary key (id),
+	foreign key (idpessoa) references pessoa 
+);
+
+
+create table acompanhante(
+	id_acompanhante int NOT NULL UNIQUE,
+    	id_pessoa int NOT NULL,
+	id_hospede int NOT NULL,
+	nome varchar(100) NOT NULL,
+	primary key (id_acompanhante),
+	foreign key (id_pessoa) references pessoa,
+	foreign key (i_dhospede) references hospede
+);
+
+
+
+create table reserva(
+	id_reserva int NOT NULL UNIQUE,
+	id_pessoa int NOT NULL,
+	id_hospede int NOT NULL,
+	nome varchar(100) NOT NULL,
+	estado varchar(100) NOT NULL,
+	numQuarto int NOT NULL,
+	datainicio date NOT NULL,
+	dataFim date NOT NULL,
+	valorDesconto int,
+	primary key (id_reserva),
+	foreign key (id_pessoa) references pessoa,
+	foreign key (id_hospede) references hospede,
+);
+
+create table quarto(
+	id_quarto int NOT NULL UNIQUE,
+	id_reserva int NOT NULL,
+	numero int NOT NULL,
+	qtdcamas int NOT NULL,
+	preco float NOT NULL,
+	descricao varchar(100) NOT NULL,
+	frigobar varchar(100) NOT NULL,
+	banheira varchar(100) NOT NULL,
+	qtdcamas varchar(100) NOT NULL,
+	tipo_quarto int NOT NULL,
+	primary key (id),
+	foreign key (id_reserva) references reserva,
+	foreign key (idtipo_quarto) references tipo_quarto,
+);
+
+
+create table consumo_frigobar(
+	id_consumo int NOT NULL UNIQUE,
+	id_reserva int NOT NULL,
+	item varchar(100) NOT NULL,
+	quantidade int,
+	data date,
+	primary key (id),
+	foreign key (id_reserva) references reserva
+); 
+
+
+create table cancelamento(
+	id_cancelamento int NOT NULL UNIQUE,
+	id_reserva int NOT NULL,
+	dataCancelamento date,
+	primary key (id_cancelamento),
+	foreign key (id_reserva) references reserva
+); 
+
+

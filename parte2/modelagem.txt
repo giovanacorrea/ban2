@@ -1,31 +1,20 @@
 pessoa (#idpessoa, nome, telefone, endereco)
 
-acompanhante (#idacompanhante, #idpessoa, #idhospede, nome)
-idpessoa referência pessoa
-idhospede referencia hospede 
-
-
 hospede (#idhospede, #idpessoa)
 idpessoa referencia pessoa 
 
-Quarto (#idquarto, #idhospede, #idreserva, tipo, numero, preco, descricao, frigobar, qtdcamas, banheira)
-idhospede referência hospede 
-idreserva referencia reserva
-idtipoquarto referência tipoQuarto
+acompanhante (#idacompanhante, #idpessoa, #idhospede, nome) 
+idpessoa referência pessoa
+idhospede referencia hospede 
 
-tipoQuarto (#idtipoquarto, descricao)
+quarto (#codquarto, tipo_quarto, qtdcamas, preco, descricao, frigobar, banheira)
 
-
-consumoFrigobar (#idconsumo, #idreserva, quantidade, data, item)
-idreserva referencia idreserva 
-
-reserva (#idreserva, #idpessoa, #idhospede, , estado, numquarto, datainicio, dataFim, valorDesconto)
-dpessoa referencia pessoa	
+reserva (#idreserva, #idhospede, codquarto, estado, datainicio, dataFim, valorDesconto)
 idhospede referência hóspede
 
-
+consumo_frigobar (#idconsumo, #idreserva, , item, quantidade, data)
+idreserva referencia idreserva 
 
 cancelamento (#idcancancelamento, #idreserva, datacancelamento)
 idreserva referencia reserva 
-
 

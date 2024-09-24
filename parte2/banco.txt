@@ -10,72 +10,62 @@ create table pessoa(
 create table hospede(
 	idhospede int NOT NULL UNIQUE,
 	idpessoa int NOT NULL,
-	primary key (id),
+	primary key (idhospede),
 	foreign key (idpessoa) references pessoa 
 );
 
 
 create table acompanhante(
-	id_acompanhante int NOT NULL UNIQUE,
-    	id_pessoa int NOT NULL,
-	id_hospede int NOT NULL,
+	idacompanhante int NOT NULL UNIQUE,
+    idpessoa int NOT NULL,
+	idhospede int NOT NULL,
 	nome varchar(100) NOT NULL,
-	primary key (id_acompanhante),
-	foreign key (id_pessoa) references pessoa,
-	foreign key (i_dhospede) references hospede
-);
-
-
-
-create table reserva(
-	id_reserva int NOT NULL UNIQUE,
-	id_pessoa int NOT NULL,
-	id_hospede int NOT NULL,
-	nome varchar(100) NOT NULL,
-	estado varchar(100) NOT NULL,
-	numQuarto int NOT NULL,
-	datainicio date NOT NULL,
-	dataFim date NOT NULL,
-	valorDesconto int,
-	primary key (id_reserva),
-	foreign key (id_pessoa) references pessoa,
-	foreign key (id_hospede) references hospede,
+	primary key (idacompanhante),
+	foreign key (idpessoa) references pessoa,
+	foreign key (idhospede) references hospede
 );
 
 create table quarto(
-	id_quarto int NOT NULL UNIQUE,
-	id_reserva int NOT NULL,
-	numero int NOT NULL,
+	codquarto int NOT NULL UNIQUE, -- será o número do quarto
+	tipo_quarto varchar(100) NOT NULL,
 	qtdcamas int NOT NULL,
 	preco float NOT NULL,
 	descricao varchar(100) NOT NULL,
-	frigobar varchar(100) NOT NULL,
-	banheira varchar(100) NOT NULL,
-	qtdcamas varchar(100) NOT NULL,
-	tipo_quarto int NOT NULL,
-	primary key (id),
-	foreign key (id_reserva) references reserva,
-	foreign key (idtipo_quarto) references tipo_quarto,
+	frigobar varchar(10) NOT NULL,
+	banheira varchar(10) NOT NULL,
+	primary key (codquarto)
+);
+
+
+create table reserva(
+	idreserva int NOT NULL UNIQUE,
+	idhospede int NOT NULL,
+	codquarto int NOT NULL,
+	estado varchar(50) NOT NULL,
+	datainicio date NOT NULL,
+	dataFim date NOT NULL,
+	valorDesconto float,
+	primary key (idreserva),
+	foreign key (idhospede) references hospede,
+	foreign key (codquarto) references quarto
 );
 
 
 create table consumo_frigobar(
-	id_consumo int NOT NULL UNIQUE,
-	id_reserva int NOT NULL,
+	idconsumo int NOT NULL UNIQUE,
+	idreserva int NOT NULL,
 	item varchar(100) NOT NULL,
 	quantidade int,
 	data date,
-	primary key (id),
-	foreign key (id_reserva) references reserva
+	primary key (idconsumo),
+	foreign key (idreserva) references reserva
 ); 
 
 
 create table cancelamento(
-	id_cancelamento int NOT NULL UNIQUE,
-	id_reserva int NOT NULL,
+	idcancelamento int NOT NULL UNIQUE,
+	idreserva int NOT NULL,
 	dataCancelamento date,
-	primary key (id_cancelamento),
-	foreign key (id_reserva) references reserva
+	primary key (idcancelamento),
+	foreign key (idreserva) references reserva
 ); 
-
-

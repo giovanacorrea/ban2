@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Hóspedes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Lista de Hóspedes</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Endereço</th>
+                <th>CPF</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hospede in hospedes %}
+            <tr>
+                <td>{{ hospede.nome }}</td>
+                <td>{{ hospede.telefone }}</td>
+                <td>{{ hospede.endereco }}</td>
+                <td>{{ hospede.id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('cadastrarHospede') }}">Cadastrar Novo Hóspede</a>
+</body>
+</html>

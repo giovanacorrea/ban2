@@ -2,17 +2,36 @@
 
 <p>O flask é um microsserviço web que facilita a criação de aplicações web com python</p>
 
-
 ```python 
 from flask import Flask 
 
 app = Flask(__name__)
-
 #criando uma rota por decorate 
 #cada rota retorna uma página desejada
     @app.route("/")
     def index():
     return 'Index'
+
+    if __name__ == '__main__':
+    app.run()
+
+```
+
+
+### MVC 
+<p>O flask se utiliza do modelo MVC para a construção das suas aplicações, com algumas particularidades, sendo divido em:</p>
+
+- Models
+- Controllers 
+- Static: Onde ficam os templates em html, CSS e Javascript das páginas 
+
+<p>O controle de rotas é feito no arquivo app.py e para acessar uma página fazemos o seguinte</p>
+
+```python 
+from flask import Flask 
+
+app = Flask(__name__, static_folder=static)
+
 
     if __name__ == '__main__':
     app.run()
@@ -59,6 +78,8 @@ if __name__ == '__main__':
 
 ### Redirecionamento de url 
 
+<p></p>
+
 ```python 
 from flask import Flask, redirect, url_for
 
@@ -70,3 +91,4 @@ if __name__ == '__main__':
     app.run()
 
 ```
+

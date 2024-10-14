@@ -84,3 +84,37 @@ VALUES (2, 1, 101, 'Ativa', '2024-11-01', '2024-11-05', 0.00);
 -- para testar a função 
 select calcular_custo_total_reserva(idreserva)
 select cancelar_reserva(idreserva)
+
+
+
+-- Essa função verifica se a reserva está em um intervalo de datas válidos e caso esteja significa que a reserva está ativa
+CREATE OR REPLACE FUNCTION atualizar_estado_reserva()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Verifica se a data atual está dentro do intervalo da reserva
+    IF CURRENT_DATE BETWEEN NEW.datainicio AND NEW.dataFim THEN
+        NEW.estado := 'Ativa';
+    ELSE
+        NEW.estado := 'Inativa';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_atualizar_estado_reserva
+BEFORE UPDATE ON reserva
+FOR EACH ROW
+EXECUTE FUNCTION atualizar_estado_reserva();
+
+-- Data válida para reserva estar ativa
+UPDATE reserva 
+SET datainicio = '2024-10-10', dataFim = '2024-10-14' 
+WHERE idreserva = 3;
+
+-- Data válida para reserva estar inativa
+UPDATE reserva 
+SET datainicio = '2024-10-10', dataFim = '2024-10-14' 
+WHERE idreserva = 3;
+
+-- Verificar o estado após a atualização
+SELECT estado FROM reserva WHERE idreserva = 3;

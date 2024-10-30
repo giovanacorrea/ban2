@@ -1,5 +1,6 @@
---Função para calcular custo da reserva
+--Trabalho realizado pelas alunas Débora Lawall e Giovana Corrêa 
 
+--Função para calcular custo da reserva
 CREATE OR REPLACE FUNCTION calcular_custo_total_reserva(p_idreserva INT)
 RETURNS FLOAT AS $$
 DECLARE

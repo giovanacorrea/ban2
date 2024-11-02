@@ -1,19 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-@app.route('/index')
+@app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', )
 
-@app.route('/cadastrarHospede')
+@app.route('/cadastrarHospede', methods=['GET', 'POST'])
 def cadastrarHospede():
     return render_template('cadastrarHospede.html')
 
 
-@app.route('/listarHospedes')
-def listarHospedes():
-    return render_template('listarHospedes.html')
+# @app.route('/listarHospedes')
+# def listarHospedes():
+#     return render_template('listarHospedes.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

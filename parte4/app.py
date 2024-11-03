@@ -12,9 +12,9 @@ def cadastrarHospede():
     return render_template('cadastrarHospede.html')
 
 
-# @app.route('/listarHospedes')
-# def listarHospedes():
-#     return render_template('listarHospedes.html')
+@app.route('/listarHospedes')
+def listarHospedes():
+    return render_template('listarHospedes.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

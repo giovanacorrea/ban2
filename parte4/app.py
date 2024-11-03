@@ -9,6 +9,7 @@ app = Flask(__name__)
 # Configuração do banco de dados PostgreSQL (substitua os valores entre <> pelos seus dados)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://gio:manaluiza1304@localhost/pousada'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.secret_key = 'pousada'  # Defina uma chave secreta
 migrate = Migrate(app, db)
 
 db.init_app(app)
@@ -18,9 +19,46 @@ db.init_app(app)
 def index():
     return render_template('index.html', )
 
-@app.route('/cadastrarHospede', methods=['GET', 'POST'])
+@app.route('/cadastroHospede', methods=['GET'])
+def cadastroHospede():
+    return render_template('cadastroHospede.html',)
+
+
+@app.route('/cadastrarHospede', methods=['POST'])
 def cadastrarHospede():
-    return render_template('cadastrarHospede.html')
+     # Obter os dados do formulário
+    nome = request.form.get('nome')
+    telefone = request.form.get('telefone')
+    endereco = request.form.get('endereco')
+    idpessoa = request.form.get('cpf')
+
+    # Criar uma nova instância de Pessoa
+    nova_pessoa = Pessoa(
+        idpessoa=idpessoa,
+        nome=nome,
+        telefone=telefone,
+        endereco=endereco,
+    )
+
+    # Adicionar a nova pessoa ao banco de dados
+    db.session.add(nova_pessoa)
+    db.session.commit()  # Commita para que a nova pessoa tenha um ID gerado
+
+    # Criar uma nova instância de Hospedes usando o ID da nova pessoa
+    novo_hospede = Hospedes(
+        idpessoa=idpessoa  # Usando o ID gerado da nova pessoa
+        # Adicione outros campos conforme necessário
+    )
+
+    # Adicionar ao banco de dados
+    db.session.add(novo_hospede)
+    db.session.commit()
+
+    # Adicionar uma mensagem de sucesso
+    flash('Hóspede cadastrado com sucesso!')
+
+    # Redirecionar para a página de listagem ou a página inicial
+    return redirect(url_for('/listarHospedes'))  # Ajuste para a rota corre
 
 
 @app.route('/listarHospedes')

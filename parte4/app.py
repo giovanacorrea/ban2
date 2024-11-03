@@ -25,8 +25,8 @@ def cadastrarHospede():
 
 @app.route('/listarHospedes')
 def listar_hospedes():
-    hospedes = db.session.query(Pessoa.nome, Pessoa.telefone, Pessoa.endereco, Hospedes.idhospede).join(Hospedes).all()
-    return render_template('listar_hospedes.html', hospedes=hospedes)
+    hospedes = db.session.query(Pessoa.nome, Pessoa.telefone, Pessoa.endereco, Hospedes.idhospede).outerjoin(Hospedes).all()
+    return render_template('listarHospedes.html', hospedes=hospedes)
 
 if __name__ == '__main__':
     with app.app_context():

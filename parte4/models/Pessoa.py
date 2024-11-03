@@ -7,3 +7,5 @@ class Pessoa(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     telefone = db.Column(db.String(100), nullable=False)
     endereco = db.Column(db.String(100), nullable=False)
+
+

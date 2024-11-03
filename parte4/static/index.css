@@ -1,9 +1,15 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
 body{
     font-family: 'Lato', Verdana, Geneva, Tahoma, sans-serif;
     background-color: #FFFF;
     text-align: center;
     font-family: 'Lato', sans-serif;
-
 }
 
 h3{
@@ -18,7 +24,7 @@ a{
     background-color: #2D4759;
     display: inline-block;
     padding: 18px 28px;
-    border-radius: 30px;
+    border-radius: 40px;
     line-height: 18px;
     font-size: 14px;
     font-weight: 600;
@@ -43,8 +49,8 @@ label{
   
 img{
     margin-top: 35px;
-    width: 20%;
-    height: 25%;
+    width: 15%;
+    height: 33%;
 }
 
 fieldset{
@@ -69,17 +75,20 @@ input[type="submit"] {
     font-family: sans-serif;
   }
   .footer {
-    position: flex;
+    width: 100%;
+    position: flex; 
     border: none;
     margin-top: 8%;
     padding: 2rem;
-    background: #ED9B60;
+    background: #2D4759;
     color: white;
     font-weight: 500;
     display: flex;
-    justify-content: center;
+    justify-content: center; 
     align-items: center;
-    gap: 0.2rem;
+   gap: 0.2rem; 
+   box-sizing: border-box; /* Garante que padding não afete a largura */
+
   }
 
   

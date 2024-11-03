@@ -46,8 +46,7 @@ def cadastrarHospede():
 
     # Criar uma nova instância de Hospedes usando o ID da nova pessoa
     novo_hospede = Hospedes(
-        idpessoa=idpessoa  # Usando o ID gerado da nova pessoa
-        # Adicione outros campos conforme necessário
+        idpessoa=nova_pessoa.idpessoa # Usando o ID gerado da nova pessoa
     )
 
     # Adicionar ao banco de dados
@@ -58,7 +57,7 @@ def cadastrarHospede():
     flash('Hóspede cadastrado com sucesso!')
 
     # Redirecionar para a página de listagem ou a página inicial
-    return redirect(url_for('/listarHospedes'))  # Ajuste para a rota corre
+    return redirect(url_for('cadastroHospede'))  # Ajuste para a rota corre
 
 
 @app.route('/listarHospedes')

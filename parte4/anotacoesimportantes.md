@@ -92,3 +92,6 @@ if __name__ == '__main__':
 
 ```
 
+### Migrações
+<p>Migrações são o que permitem que o banco de dados esteja sempre atualizado, quando uma alterção
+ocorrer no POSTGRESQL </p>

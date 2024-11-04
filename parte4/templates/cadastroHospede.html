@@ -25,17 +25,16 @@
                         <label for="endereco"></label>
                         <input type="text" id="endereco" name="endereco" placeholder="endereco">
                         <label for="cpf"></label>
-                        <input type="number" id="cpf" name="cpf" placeholder="cpf">
-                        <!-- <label for="categoria"></label>
-                        <select id="acompanhante" name="acompanhante" placeholder="Possui acompanhante?">
-                            <option value="acompanhante"></option>
-                            <option value="categoria2">Sim</option>
-                            <option value="categoria3">Não</option>
-                        </select> -->
+                        <input type="number" id="cpf" name="cpf" placeholder="cpf">                      
                     </div>
                 </div>
+                
+                <button type="button" onclick="adicionarAcompanhante()" id="add-acomp-button" class="submit-button">Adicionar Acompanhante</button>
+                <div id="acompanhantes-container"></div>
+                
                 <button type="submit" class="submit-button" id="submit-button">Enviar</button>
                   <a href="/listar_hospedes" class="submit-button" id="submit-button">Lista de hóspedes</a>
+                
             </form>
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -47,6 +46,18 @@
                 {% endif %}
             {% endwith %}
                 </form>
+                
+            <script>
+		function adicionarAcompanhante() {
+		    const acompanhantesContainer = document.getElementById('acompanhantes-container');
+		    const novoCampo = document.createElement('div');
+		    novoCampo.className = 'form-container';
+		    novoCampo.innerHTML = `
+		        <input type="text" name="acompanhante[]" placeholder="Nome do acompanhante" required>
+		    `;
+		    acompanhantesContainer.appendChild(novoCampo);
+		}
+	    </script>
     </body>
 
 

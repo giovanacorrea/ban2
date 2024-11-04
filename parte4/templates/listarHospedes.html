@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listar Hóspedes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='hospede.css') }}">
+    <title>Hóspedes</title>
+    <link rel="stylesheet" href="static/listaHospedes.css">
 </head>
 <body>
-    <h1>Lista de Hóspedes</h1>
     <table>
         <thead>
             <tr>
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Endereço</th>
-                <th>CPF</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -23,11 +22,14 @@
                 <td>{{ hospede.nome }}</td>
                 <td>{{ hospede.telefone }}</td>
                 <td>{{ hospede.endereco }}</td>
-                <td>{{ hospede.id }}</td>
+                <td>
+                    <button class="edit-btn">Alterar</button>
+                    <button class="delete-btn">Deletar</button>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{{ url_for('cadastroHospede') }}">Cadastrar Novo Hóspede</a>
+    <a href="{{ url_for('cadastroHospede') }}">Cadastrar novo hóspede</a>
 </body>
 </html>

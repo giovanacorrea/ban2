@@ -13,7 +13,7 @@ a {
 }
 
 #link {
-  background-color: #2D4759;
+  background-color: #ED9B60;
 }
 
 .button {
@@ -50,7 +50,7 @@ input {
   margin-left: 10px;
   border-radius: 20px;
   background-color: white;
-  border: 1px solid #2D4759;
+  border: 1px solid #0A90F0;
   color: #2D4759;
   width: 100%;
   min-height: 2em;
@@ -133,6 +133,5 @@ input[type="submit"] {
 .form-container select {
   margin-left: -50%;
 }
-
 
 

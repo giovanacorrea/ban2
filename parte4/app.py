@@ -6,8 +6,10 @@ import os
 
 app = Flask(__name__)
 
-# Configuração do banco de dados PostgreSQL (substitua os valores entre <> pelos seus dados)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://gio:manaluiza1304@localhost/pousada'
+# Configuração do banco de dados PostgreSQL 
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:1234@localhost/T2-BAN2'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://gio:manaluiza1304@localhost/pousada'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.secret_key = 'pousada'  # Defina uma chave secreta
 migrate = Migrate(app, db)
@@ -64,6 +66,14 @@ def cadastrarHospede():
 def listar_hospedes():
     hospedes = db.session.query(Pessoa.nome, Pessoa.telefone, Pessoa.endereco, Hospedes.idhospede).outerjoin(Hospedes).all()
     return render_template('listarHospedes.html', hospedes=hospedes)
+    
+@app.route('/cadastrarQuarto')
+def cadastrarQuarto():
+    return render_template('cadastrarQuarto.html')
+    
+@app.route('/reserva')
+def reserva():
+    return render_template('reserva.html')
 
 if __name__ == '__main__':
     with app.app_context():

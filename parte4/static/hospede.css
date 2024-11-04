@@ -13,7 +13,7 @@ a {
 }
 
 #link {
-  background-color: #ED9B60;
+  background-color: #2D4759;
 }
 
 .button {
@@ -50,14 +50,14 @@ input {
   margin-left: 10px;
   border-radius: 20px;
   background-color: white;
-  border: 1px solid #0A90F0;
-  color: #0A90F0;
+  border: 1px solid #2D4759;
+  color: #2D4759;
   width: 100%;
   min-height: 2em;
 }
 
 input[type="submit"] {
-  background-color: #ED9B60;
+  background-color: #2D4759;
   color: white;
 }
 
@@ -118,7 +118,7 @@ input[type="submit"] {
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 50px; /* Tornando as bordas mais arredondadas */
-  background-color: #0A90F0; /* Alterando cor de fundo */
+  background-color: #2D4759; /* Alterando cor de fundo */
   color: #FFF4ED; /* Alterando cor do texto */
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Mudando a fonte */
   border: 2px solid transparent; /* Adicionando borda transparente */
@@ -127,7 +127,7 @@ input[type="submit"] {
 }
 
 .submit-button:hover {
-  background-color: #0A90F0; /* Cor de fundo do botão ao passar o mouse */
+  background-color: #2D4759; /* Cor de fundo do botão ao passar o mouse */
 }
 
 .form-container select {

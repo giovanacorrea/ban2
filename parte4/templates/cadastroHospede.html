@@ -1,11 +1,16 @@
+{% extends "nav.html" %}
+
+
 <!DOCTYPE html>
 <html>
+    {% block content %}
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="static/hospede.css">
         
     </head>
-    <body>
+
+    <body id="body">
         <img src="static/images/pousadaLogo-sfundo.png" alt="Logo">
             <h2>Cadastro de Hóspede</h2>
             <form id="userForm" action="/cadastrarHospede" method="post">
@@ -30,7 +35,7 @@
                     </div>
                 </div>
                 <button type="submit" class="submit-button" id="submit-button">Enviar</button>
-                  <a href="/listarHospedes" class="submit-button" id="submit-button">Lista de hóspedes</a>
+                  <a href="/listar_hospedes" class="submit-button" id="submit-button">Lista de hóspedes</a>
             </form>
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -45,5 +50,6 @@
     </body>
 
 
+    {% endblock %}
 
 </html>

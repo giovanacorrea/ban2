@@ -15,7 +15,7 @@ migrate = Migrate(app, db)
 db.init_app(app)
 
 
-@app.route('/')
+@app.route('/index')
 def index():
     return render_template('index.html', )
 
@@ -60,7 +60,7 @@ def cadastrarHospede():
     return redirect(url_for('cadastroHospede'))  # Ajuste para a rota corre
 
 
-@app.route('/listarHospedes')
+@app.route('/listar_hospedes')
 def listar_hospedes():
     hospedes = db.session.query(Pessoa.nome, Pessoa.telefone, Pessoa.endereco, Hospedes.idhospede).outerjoin(Hospedes).all()
     return render_template('listarHospedes.html', hospedes=hospedes)

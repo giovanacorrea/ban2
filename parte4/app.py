@@ -67,7 +67,7 @@ def cadastrarHospede():
 #Aqui está listando todas as pessoas e não apenas os hospedes, necessário corrigir 
 @app.route('/listar_hospedes')
 def listar_hospedes():
-    hospedes = db.session.query(Pessoa.nome, Pessoa.telefone, Pessoa.endereco, Hospedes.idhospede).outerjoin(Hospedes).all()
+    hospedes = db.session.query(Pessoa.nome, Pessoa.telefone, Pessoa.endereco, Hospedes.idhospede).join(Hospedes, Pessoa.idpessoa == Hospedes.idpessoa).all()
     return render_template('listarHospedes.html', hospedes=hospedes)
 
 @app.route('/cadastrarQuarto')

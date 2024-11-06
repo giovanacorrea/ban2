@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from models import db, Pessoa, Hospedes, Quarto
+from sqlalchemy.exc import InternalError
+from models import db, Pessoa, Hospedes, Quarto, Reserva
 from flask_migrate import Migrate
 import os
 
@@ -63,7 +64,7 @@ def cadastrarHospede():
     # Redirecionar para a página de listagem ou a página inicial
     return redirect(url_for('cadastroHospede'))  # Ajuste para a rota corre
 
-
+#Aqui está listando todas as pessoas e não apenas os hospedes, necessário corrigir 
 @app.route('/listar_hospedes')
 def listar_hospedes():
     hospedes = db.session.query(Pessoa.nome, Pessoa.telefone, Pessoa.endereco, Hospedes.idhospede).outerjoin(Hospedes).all()
@@ -104,12 +105,55 @@ def cadastroQuarto():
 
     # Redirecionar para a página de listagem ou a página inicial
     return redirect(url_for('cadastrarQuarto'))
-
-
     
 @app.route('/reserva')
 def reserva():
     return render_template('reserva.html')
+
+@app.route('/CadastrarReserva',  methods=['POST'])
+def CadastrarReserva():
+    idhospede = request.form.get('cpf')
+    codquarto = request.form.get('numquarto')
+    estado = request.form.get('estado')
+    datainicio = request.form.get('datainicio')
+    datafim = request.form.get('datafim')
+    valordesconto = request.form.get('cupom')
+
+    subconsulta_idhospede = db.session.query(Hospedes.idhospede).join(Pessoa).filter(Pessoa.idpessoa == idhospede).scalar_subquery()
+
+    # Verificação para garantir que o idhospede foi encontrado antes de continuar
+    if subconsulta_idhospede is None:
+        flash('Hospede com o CPF informado não encontrado!')
+        return redirect(url_for('formulario_cadastro_reserva'))
+    
+    # Criar uma nova instância de Quarto
+    nova_reserva = Reserva(
+        idhospede= subconsulta_idhospede,
+        codquarto=codquarto,
+        estado=estado,
+        datainicio=datainicio,
+        datafim=datafim,
+        valordesconto=valordesconto
+    )
+    
+    try:
+        # Adicionar e salvar a nova reserva no banco de dados
+        db.session.add(nova_reserva)
+        db.session.commit()
+        flash('Reserva cadastrada com sucesso!')
+        return redirect(url_for('reserva'))
+    except InternalError as e:
+        # Desfazer a transação caso ocorra um erro
+        db.session.rollback()
+        
+        # Verificar a mensagem de erro e exibir um alerta específico
+        if "O quarto" in str(e.orig):
+            flash(str(e.orig).split('\n')[0])  # Exibe apenas a primeira linha do erro
+        else:
+            flash('Ocorreu um erro ao cadastrar a reserva. Tente novamente.')
+        
+        return redirect(url_for('reserva'))
+
 
 @app.route('/listar_quartos')
 def listar_quartos():

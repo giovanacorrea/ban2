@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from models import db, Pessoa, Hospedes
+from models import db, Pessoa, Hospedes, Quarto
 from flask_migrate import Migrate
 import os
 
@@ -72,10 +72,49 @@ def listar_hospedes():
 @app.route('/cadastrarQuarto')
 def cadastrarQuarto():
     return render_template('cadastrarQuarto.html')
+
+@app.route('/cadastroQuarto', methods=['POST'])
+def cadastroQuarto():
+    # Obter os dados do formulário
+    codquarto = request.form.get('numquarto')  
+    tipo_quarto = request.form.get('tipoQuarto')
+    qtdcamas = request.form.get('quantidadeCamas')
+    preco = request.form.get('preco')
+    descricao = request.form.get('descricao')
+    frigobar = request.form.get('frigobar')
+    banheira = request.form.get('banheira')
+    
+    # Criar uma nova instância de Quarto
+    novo_quarto = Quarto(
+        codquarto=codquarto,
+        tipo_quarto=tipo_quarto,
+        qtdcamas=qtdcamas,
+        preco=preco,
+        descricao=descricao,
+        frigobar=frigobar,
+        banheira=banheira
+    )
+    
+    # Adicionar o novo quarto ao banco de dados
+    db.session.add(novo_quarto)
+    db.session.commit()
+
+    # Adicionar uma mensagem de sucesso
+    flash('Quarto cadastrado com sucesso!')
+
+    # Redirecionar para a página de listagem ou a página inicial
+    return redirect(url_for('cadastrarQuarto'))
+
+
     
 @app.route('/reserva')
 def reserva():
     return render_template('reserva.html')
+
+@app.route('/listar_quartos')
+def listar_quartos():
+    quartos = db.session.query(Quarto.codquarto, Quarto.tipo_quarto, Quarto.qtdcamas, Quarto.preco)
+    return render_template('listarQuartos.html', quartos=quartos)
 
 if __name__ == '__main__':
     with app.app_context():

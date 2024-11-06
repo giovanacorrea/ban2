@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quartos</title>
+    <link rel="stylesheet" href="static/listaQuartos.css">
+</head>
+
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Tipo</th>
+                <th>Quantidade de camas</th>
+                <th>Preço</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quarto in quartos %}
+            <tr>
+                <td>{{ quarto.codquarto }}</td>
+                <td>{{ quarto.tipo_quarto }}</td>
+                <td>{{ quarto.qtdcamas }}</td>
+                <td>{{ quarto.preco }}</td>
+                <td>
+                    <button class="edit-btn">Alterar</button>
+                    <button class="delete-btn">Deletar</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('cadastrarQuarto') }}">Cadastrar novo quarto</a>
+</body>
+
+
+</html>

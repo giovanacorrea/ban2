@@ -1,3 +1,9 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Lato', Verdana, Geneva, Tahoma, sans-serif;
   background-color: #FFFF;
@@ -208,3 +214,18 @@ input[type="submit"] {
   height: 16px;
 }
 
+.footer {
+  width: 100%;
+  position: flex; 
+  border: none;
+  margin-top: 8%;
+  padding: 2rem;
+  color: white;
+  font-weight: 500;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+ gap: 0.2rem; 
+ box-sizing: border-box; /* Garante que padding não afete a largura */
+
+}

@@ -8,11 +8,7 @@ import os
 app = Flask(__name__)
 
 # Configuração do banco de dados PostgreSQL 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:1234@localhost/T2-BAN2'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://gio:manaluiza1304@localhost/pousada'
-
-# Configuração do banco de dados PostgreSQL (substitua os valores entre <> pelos seus dados)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://gio:manaluiza1304@localhost/pousada'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:1234@localhost/T2-BAN2'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.secret_key = 'pousada'  # Defina uma chave secreta
 migrate = Migrate(app, db)
@@ -119,55 +115,62 @@ def reserva():
     print(quartos)
     return render_template('reserva.html', quartos=quartos)
 
-@app.route('/CadastrarReserva', methods=['POST'])
+@app.route('/CadastrarReserva',  methods=['POST'])
 def CadastrarReserva():
     idhospede = request.form.get('cpf')
+    codquarto = request.form.get('numquarto')
     estado = request.form.get('estado')
     datainicio = request.form.get('datainicio')
     datafim = request.form.get('datafim')
     valordesconto = request.form.get('cupom')
-    
-    # Get all selected room numbers as a list
-    codquartos = request.form.getlist('numquarto')
-    
+
     subconsulta_idhospede = db.session.query(Hospedes.idhospede).join(Pessoa).filter(Pessoa.idpessoa == idhospede).scalar_subquery()
 
+    # Verificação para garantir que o idhospede foi encontrado antes de continuar
     if subconsulta_idhospede is None:
         flash('Hospede com o CPF informado não encontrado!')
         return redirect(url_for('formulario_cadastro_reserva'))
-
+    
+    # Criar uma nova instância de Quarto
+    nova_reserva = Reserva(
+        idhospede= subconsulta_idhospede,
+        codquarto=codquarto,
+        estado=estado,
+        datainicio=datainicio,
+        datafim=datafim,
+        valordesconto=valordesconto
+    )
+    
     try:
-        # Create a reservation for each selected room
-        for codquarto in codquartos:
-            nova_reserva = Reserva(
-                idhospede=subconsulta_idhospede,
-                codquarto=codquarto,
-                estado=estado,
-                datainicio=datainicio,
-                datafim=datafim,
-                valordesconto=valordesconto
-            )
-            db.session.add(nova_reserva)
-        
-        # Commit all reservations at once
+        # Adicionar e salvar a nova reserva no banco de dados
+        db.session.add(nova_reserva)
         db.session.commit()
-        flash('Reserva(s) cadastrada(s) com sucesso!')
+        flash('Reserva cadastrada com sucesso!')
         return redirect(url_for('reserva'))
     except InternalError as e:
+        # Desfazer a transação caso ocorra um erro
         db.session.rollback()
+        
+        # Verificar a mensagem de erro e exibir um alerta específico
         if "O quarto" in str(e.orig):
-            flash(str(e.orig).split('\n')[0])
+            flash(str(e.orig).split('\n')[0])  # Exibe apenas a primeira linha do erro
         else:
             flash('Ocorreu um erro ao cadastrar a reserva. Tente novamente.')
+        
         return redirect(url_for('reserva'))
-
 
 
 @app.route('/listar_quartos')
 def listar_quartos():
     quartos = db.session.query(Quarto.codquarto, Quarto.tipo_quarto, Quarto.qtdcamas, Quarto.preco)
     return render_template('listarQuartos.html', quartos=quartos)
-
+  
+@app.route('/relatorioReservas')
+def relatorioReservas():
+	reservas = db.session.query(Reserva, Hospedes, Pessoa, Quarto).join(Hospedes, Reserva.idhospede == Hospedes.idhospede).join(Pessoa, Hospedes.idpessoa == Pessoa.idpessoa).join(Quarto, Reserva.codquarto == Quarto.codquarto).filter(Reserva.estado == 'ativa').all()
+	
+	return render_template('relatorioReservas.html', reservas=reservas)
+	
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  

@@ -11,7 +11,7 @@
     <table>
         <thead>
             <tr>
-                <th>ID Reserva</th>
+                <th>ID do Hóspede</th>
                 <th>Nome do Hóspede</th>
                 <th>Telefone do Hóspede</th>
                 <th>Quarto</th>
@@ -22,12 +22,12 @@
             </tr>
         </thead>
         <tbody>
-            {% for reserva, hospede, pessoa, quarto in reservas_ativas %}
+            {% for reserva, hospede, pessoa, quarto in reservas %}
             <tr>
-                <td>{{ reserva.idreserva }}</td>
+                <td>{{ reserva.idhospede }}</td>
                 <td>{{ pessoa.nome }}</td>
                 <td>{{ pessoa.telefone }}</td>
-                <td>{{ quarto.codquarto }}</td>
+                <td>{{ reserva.codquarto }}</td>
                 <td>{{ quarto.tipo_quarto }}</td>
                 <td>{{ reserva.datainicio.strftime('%d/%m/%Y') }}</td>
                 <td>{{ reserva.datafim.strftime('%d/%m/%Y') }}</td>

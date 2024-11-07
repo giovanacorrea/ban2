@@ -13,7 +13,7 @@
     <body id="body">
         <img src="static/images/pousadaLogo-sfundo.png" alt="Logo">
             <h2>Cadastro de Hóspede</h2>
-            <form id="userForm" action="/cadastrarHospede" method="post">
+            <form id="userForm" action="/cadastrarHospede" method="POST">
                 <div class="form-section">
                     <div class="form-container">
                         <label for="nome">Nome:</label>
@@ -52,9 +52,8 @@
 		function adicionarAcompanhante() {
 		    const acompanhantesContainer = document.getElementById('acompanhantes-container');
 		    const novoCampo = document.createElement('div');
-		    novoCampo.className = 'form-container';
+		    novoCampo.className = 'form-section';
 		    novoCampo.innerHTML = `
-            <div class='form-section'>
                 <div class='form-container'>
 		        <input type="text" name="acompanhante[]" placeholder="Nome do acompanhante" required>
                 </div>

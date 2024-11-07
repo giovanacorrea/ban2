@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import InternalError
-from models import db, Pessoa, Hospedes, Quarto, Reserva
+from models import db, Pessoa, Hospedes, Quarto, Reserva, Acompanhante
 from flask_migrate import Migrate
 import os
 
@@ -29,40 +29,100 @@ def cadastroHospede():
     return render_template('cadastroHospede.html',)
 
 
+# @app.route('/cadastrarHospede', methods=['POST'])
+# def cadastrarHospede():
+#     # Obter os dados do formulário
+#     nome = request.form.get('nome')
+#     telefone = request.form.get('telefone')
+#     endereco = request.form.get('endereco')
+#     idpessoa = request.form.get('cpf')
+
+#     # Criar uma nova instância de Pessoa
+#     nova_pessoa = Pessoa(
+#         idpessoa=idpessoa,
+#         nome=nome,
+#         telefone=telefone,
+#         endereco=endereco,
+#     )
+
+#     # Adicionar a nova pessoa ao banco de dados
+#     db.session.add(nova_pessoa)
+#     db.session.commit()  # Commita para que a nova pessoa tenha um ID gerado
+
+#     # Criar uma nova instância de Hospedes usando o ID da nova pessoa
+#     novo_hospede = Hospedes(
+#         idpessoa=nova_pessoa.idpessoa  # Usando o ID gerado da nova pessoa
+#     )
+
+#     # Adicionar ao banco de dados
+#     db.session.add(novo_hospede)
+#     db.session.flush()  # Garante que `novo_hospede.idhospede` seja gerado antes de prosseguir
+
+#     # Obter a lista de nomes dos acompanhantes
+#     nacompanhantes = request.form.getlist('acompanhante')
+    
+#     # Associar cada acompanhante ao hóspede
+#     for nomeacompanhante in nacompanhantes:
+#         novo_acompanhante = Acompanhante(
+#             nome=nomeacompanhante, 
+#             idhospede=novo_hospede.idhospede,  # ID do hóspede criado acima
+#             idpessoa=nova_pessoa.idpessoa  # ID da pessoa associada ao hóspede
+#         )
+#         db.session.add(novo_acompanhante)
+
+#     try:
+#         # Commit final para salvar hóspedes e acompanhantes
+#         db.session.commit()
+#         flash('Hóspede e acompanhantes cadastrados com sucesso!')
+#     except Exception as e:
+#         db.session.rollback()
+#         flash(f'Ocorreu um erro ao cadastrar: {str(e)}')
+    
+#     return redirect(url_for('listar_hospedes'))
+
+
 @app.route('/cadastrarHospede', methods=['POST'])
 def cadastrarHospede():
-     # Obter os dados do formulário
+    # Verifique os dados de entrada
+    print("Dados recebidos do formulário:")
+    print(request.form)
+
     nome = request.form.get('nome')
     telefone = request.form.get('telefone')
     endereco = request.form.get('endereco')
     idpessoa = request.form.get('cpf')
 
-    # Criar uma nova instância de Pessoa
-    nova_pessoa = Pessoa(
-        idpessoa=idpessoa,
-        nome=nome,
-        telefone=telefone,
-        endereco=endereco,
-    )
-
-    # Adicionar a nova pessoa ao banco de dados
+    # Cria a nova pessoa e adiciona ao banco
+    nova_pessoa = Pessoa(idpessoa=idpessoa, nome=nome, telefone=telefone, endereco=endereco)
     db.session.add(nova_pessoa)
-    db.session.commit()  # Commita para que a nova pessoa tenha um ID gerado
-
-    # Criar uma nova instância de Hospedes usando o ID da nova pessoa
-    novo_hospede = Hospedes(
-        idpessoa=nova_pessoa.idpessoa # Usando o ID gerado da nova pessoa
-    )
-
-    # Adicionar ao banco de dados
-    db.session.add(novo_hospede)
     db.session.commit()
 
-    # Adicionar uma mensagem de sucesso
-    flash('Hóspede cadastrado com sucesso!')
+    # Cria o novo hóspede e adiciona ao banco
+    novo_hospede = Hospedes(idpessoa=nova_pessoa.idpessoa)
+    db.session.add(novo_hospede)
+    db.session.flush()
 
-    # Redirecionar para a página de listagem ou a página inicial
-    return redirect(url_for('cadastroHospede'))  # Ajuste para a rota corre
+    # Verifique os acompanhantes
+    nacompanhantes = request.form.getlist('acompanhante[]')
+    print("Acompanhantes recebidos:", nacompanhantes)
+    
+    for nomeacompanhante in nacompanhantes:
+        novo_acompanhante = Acompanhante(
+            nome=nomeacompanhante,
+            idhospede=novo_hospede.idhospede,
+            idpessoa=nova_pessoa.idpessoa
+        )
+        db.session.add(novo_acompanhante)
+
+    try:
+        db.session.commit()
+        flash('Hóspede e acompanhantes cadastrados com sucesso!')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Ocorreu um erro ao cadastrar: {str(e)}')
+    
+    return redirect(url_for('listar_hospedes'))
+
 
 #Aqui está listando todas as pessoas e não apenas os hospedes, necessário corrigir 
 @app.route('/listar_hospedes')

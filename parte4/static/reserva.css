@@ -68,27 +68,27 @@ input[type="submit"] {
   font-family: sans-serif;
 }
 
-.container {
+.container { 
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-top: 20px; /* Adicionando espaço abaixo da imagem */
+  margin-top: 20px; 
   width: 100%;
-  max-width: 1000px; /* Definindo uma largura máxima */
-  margin: auto; /* Centralizando horizontalmente */
+  max-width: 1000px; 
+  margin: auto; 
 }
 
 .form-section {
   display: flex;
-  margin-left: 2%;
+  margin-left: 2%; 
   justify-content: center;
-  margin-top: 20px; /* Adicionando espaço acima do formulário */
+  margin-top: 20px; 
   width: 100%;
 }
 
 .form-container {
-  text-align: left; /* Alinhando o texto à esquerda */
+  /* text-align: left; Alinhando o texto à esquerda */
   width: 40%; /* Definindo a largura de cada coluna */
 }
 
@@ -102,15 +102,22 @@ input[type="submit"] {
 
 .form-container input,
 .form-container select {
-  display: block;
+  display: inline-block;
   width: 90%;
   padding: 10px;
-  margin-bottom: 20px; /* Adicionando espaço entre os campos de entrada */
+  margin-bottom: 20px; 
   font-size: 16px;
-  border-radius: 20px; /* Tornando as bordas mais arredondadas */
+  border-radius: 20px; 
   border: 2px solid #ccc;
-  box-sizing: border-box;
+  box-sizing: border-box; 
 }
+
+.form-container select{
+  margin-right: -50%;
+  text-align: center;
+}
+
+
 
 .submit-button {
   display: block;

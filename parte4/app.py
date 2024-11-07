@@ -28,59 +28,6 @@ def index():
 def cadastroHospede():
     return render_template('cadastroHospede.html',)
 
-
-# @app.route('/cadastrarHospede', methods=['POST'])
-# def cadastrarHospede():
-#     # Obter os dados do formulário
-#     nome = request.form.get('nome')
-#     telefone = request.form.get('telefone')
-#     endereco = request.form.get('endereco')
-#     idpessoa = request.form.get('cpf')
-
-#     # Criar uma nova instância de Pessoa
-#     nova_pessoa = Pessoa(
-#         idpessoa=idpessoa,
-#         nome=nome,
-#         telefone=telefone,
-#         endereco=endereco,
-#     )
-
-#     # Adicionar a nova pessoa ao banco de dados
-#     db.session.add(nova_pessoa)
-#     db.session.commit()  # Commita para que a nova pessoa tenha um ID gerado
-
-#     # Criar uma nova instância de Hospedes usando o ID da nova pessoa
-#     novo_hospede = Hospedes(
-#         idpessoa=nova_pessoa.idpessoa  # Usando o ID gerado da nova pessoa
-#     )
-
-#     # Adicionar ao banco de dados
-#     db.session.add(novo_hospede)
-#     db.session.flush()  # Garante que `novo_hospede.idhospede` seja gerado antes de prosseguir
-
-#     # Obter a lista de nomes dos acompanhantes
-#     nacompanhantes = request.form.getlist('acompanhante')
-    
-#     # Associar cada acompanhante ao hóspede
-#     for nomeacompanhante in nacompanhantes:
-#         novo_acompanhante = Acompanhante(
-#             nome=nomeacompanhante, 
-#             idhospede=novo_hospede.idhospede,  # ID do hóspede criado acima
-#             idpessoa=nova_pessoa.idpessoa  # ID da pessoa associada ao hóspede
-#         )
-#         db.session.add(novo_acompanhante)
-
-#     try:
-#         # Commit final para salvar hóspedes e acompanhantes
-#         db.session.commit()
-#         flash('Hóspede e acompanhantes cadastrados com sucesso!')
-#     except Exception as e:
-#         db.session.rollback()
-#         flash(f'Ocorreu um erro ao cadastrar: {str(e)}')
-    
-#     return redirect(url_for('listar_hospedes'))
-
-
 @app.route('/cadastrarHospede', methods=['POST'])
 def cadastrarHospede():
     # Verifique os dados de entrada
@@ -168,7 +115,9 @@ def cadastroQuarto():
     
 @app.route('/reserva')
 def reserva():
-    return render_template('reserva.html')
+    quartos = db.session.query(Quarto).all()
+    print(quartos)
+    return render_template('reserva.html', quartos=quartos)
 
 @app.route('/CadastrarReserva',  methods=['POST'])
 def CadastrarReserva():
@@ -224,5 +173,3 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()  
     app.run(debug=True)
-
-

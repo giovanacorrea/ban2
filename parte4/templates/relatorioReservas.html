@@ -1,32 +1,41 @@
+<!-- templates/reservas_ativas.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservas de Hoje</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Reservas Ativas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='listaHospedes.css') }}">
 </head>
 <body>
-    <h1>Reservas de Hoje</h1>
+    <h1>Reservas Ativas</h1>
     <table>
         <thead>
             <tr>
-                <th>ID da Reserva</th>
-                <th>ID do Hóspede</th>
-                <th>Data da Reserva</th>
-                <!-- Adicione outros campos relevantes -->
+                <th>ID Reserva</th>
+                <th>Nome do Hóspede</th>
+                <th>Telefone do Hóspede</th>
+                <th>Quarto</th>
+                <th>Tipo de Quarto</th>
+                <th>Data de Início</th>
+                <th>Data de Fim</th>
+                <th>Estado</th>
             </tr>
         </thead>
         <tbody>
-            {% for reserva in reservas %}
+            {% for reserva, hospede, pessoa, quarto in reservas_ativas %}
             <tr>
-                <td>{{ reserva.id }}</td>
-                <td>{{ reserva.hospede_id }}</td>
-                <td>{{ reserva.data_reserva }}</td>
-                <!-- Adicione outros campos relevantes -->
+                <td>{{ reserva.idreserva }}</td>
+                <td>{{ pessoa.nome }}</td>
+                <td>{{ pessoa.telefone }}</td>
+                <td>{{ quarto.codquarto }}</td>
+                <td>{{ quarto.tipo_quarto }}</td>
+                <td>{{ reserva.datainicio.strftime('%d/%m/%Y') }}</td>
+                <td>{{ reserva.datafim.strftime('%d/%m/%Y') }}</td>
+                <td>{{ reserva.estado }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    <a href="{{ url_for('index') }}">Voltar</a>
 </body>
 </html>

@@ -15,11 +15,15 @@
                 <label for="cpf">CPF hóspede:</label>
                 <input type="number" id="cpf" name="cpf">
                 
-                <label for="numquarto">Número do quarto:</label>
-                <input type="number" id="numquarto" name="numquarto">  
-                
                 <label for="cupom">Cupom de desconto:</label>
-                <input type="number" id="cupom" name="cupom">      	
+                <input type="number" id="cupom" name="cupom">      
+                
+                <label for="numquarto">Número do quarto:</label>
+                <select id="numquarto" name="numquarto">
+                    -{% for quarto in quartos %}
+                        <option value="{{ quarto.codquarto }}">{{ quarto.codquarto }} - {{ quarto.tipo_quarto }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="form-container">
             	<label for= "dataEntrada">Data de entrada:</label>
@@ -46,4 +50,3 @@
         </body>
         {% endblock %}
 </html>
-

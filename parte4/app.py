@@ -119,49 +119,48 @@ def reserva():
     print(quartos)
     return render_template('reserva.html', quartos=quartos)
 
-@app.route('/CadastrarReserva',  methods=['POST'])
+@app.route('/CadastrarReserva', methods=['POST'])
 def CadastrarReserva():
     idhospede = request.form.get('cpf')
-    codquarto = request.form.get('numquarto')
     estado = request.form.get('estado')
     datainicio = request.form.get('datainicio')
     datafim = request.form.get('datafim')
     valordesconto = request.form.get('cupom')
-
+    
+    # Get all selected room numbers as a list
+    codquartos = request.form.getlist('numquarto')
+    
     subconsulta_idhospede = db.session.query(Hospedes.idhospede).join(Pessoa).filter(Pessoa.idpessoa == idhospede).scalar_subquery()
 
-    # Verificação para garantir que o idhospede foi encontrado antes de continuar
     if subconsulta_idhospede is None:
         flash('Hospede com o CPF informado não encontrado!')
         return redirect(url_for('formulario_cadastro_reserva'))
-    
-    # Criar uma nova instância de Quarto
-    nova_reserva = Reserva(
-        idhospede= subconsulta_idhospede,
-        codquarto=codquarto,
-        estado=estado,
-        datainicio=datainicio,
-        datafim=datafim,
-        valordesconto=valordesconto
-    )
-    
+
     try:
-        # Adicionar e salvar a nova reserva no banco de dados
-        db.session.add(nova_reserva)
+        # Create a reservation for each selected room
+        for codquarto in codquartos:
+            nova_reserva = Reserva(
+                idhospede=subconsulta_idhospede,
+                codquarto=codquarto,
+                estado=estado,
+                datainicio=datainicio,
+                datafim=datafim,
+                valordesconto=valordesconto
+            )
+            db.session.add(nova_reserva)
+        
+        # Commit all reservations at once
         db.session.commit()
-        flash('Reserva cadastrada com sucesso!')
+        flash('Reserva(s) cadastrada(s) com sucesso!')
         return redirect(url_for('reserva'))
     except InternalError as e:
-        # Desfazer a transação caso ocorra um erro
         db.session.rollback()
-        
-        # Verificar a mensagem de erro e exibir um alerta específico
         if "O quarto" in str(e.orig):
-            flash(str(e.orig).split('\n')[0])  # Exibe apenas a primeira linha do erro
+            flash(str(e.orig).split('\n')[0])
         else:
             flash('Ocorreu um erro ao cadastrar a reserva. Tente novamente.')
-        
         return redirect(url_for('reserva'))
+
 
 
 @app.route('/listar_quartos')

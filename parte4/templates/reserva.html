@@ -18,12 +18,52 @@
                 <label for="cupom">Cupom de desconto:</label>
                 <input type="number" id="cupom" name="cupom">      
                 
-                <label for="numquarto">Número do quarto:</label>
-                <select id="numquarto" name="numquarto">
-                    -{% for quarto in quartos %}
-                        <option value="{{ quarto.codquarto }}">{{ quarto.codquarto }} - {{ quarto.tipo_quarto }}</option>
-                    {% endfor %}
-                </select>
+               
+                <div class="dropdown">
+                    <div class="dropdown">
+                        <label for="numquarto">Quartos</label>
+                        <input type="text" id="selectedRooms" placeholder="Selecione os quartos" readonly onclick="toggleDropdown()" />
+                        <div id="checkboxDropdown" class="dropdown-content">
+                            {% for quarto in quartos %}
+                                <div class="checkbox-option">
+                                    <input type="checkbox" name="numquarto" value="{{ quarto.codquarto }}" id="quarto-{{ quarto.codquarto }}" onchange="updateSelectedRooms()">
+                                    <label for="quarto-{{ quarto.codquarto }}">{{ quarto.codquarto }} - {{ quarto.tipo_quarto }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <script>
+                        function toggleDropdown() {
+                            document.getElementById("checkboxDropdown").style.display = 
+                                document.getElementById("checkboxDropdown").style.display === "none" ? "block" : "none";
+                        }
+
+                        function updateSelectedRooms() {
+                            const checkboxes = document.querySelectorAll('#checkboxDropdown input[type="checkbox"]');
+                            let selected = [];
+                            
+                            checkboxes.forEach((checkbox) => {
+                                if (checkbox.checked) {
+                                    selected.push(checkbox.nextElementSibling.textContent.trim());
+                                }
+                            });
+                            
+                            document.getElementById("selectedRooms").value = selected.join(", ");
+                        }
+
+                        // Fechar dropdown ao clicar fora dele
+                        document.addEventListener('click', function(event) {
+                            const dropdown = document.getElementById("checkboxDropdown");
+                            const selectedRooms = document.getElementById("selectedRooms");
+                            if (!dropdown.contains(event.target) && event.target !== selectedRooms) {
+                                dropdown.style.display = "none";
+                            }
+                        });
+
+                    </script>
+                
+                </div>
+                
             </div>
             <div class="form-container">
             	<label for= "dataEntrada">Data de entrada:</label>

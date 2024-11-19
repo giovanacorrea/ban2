@@ -1,0 +1,41 @@
+<!-- templates/reservas_canceladas.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservas Canceladas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='listaHospedes.css') }}">
+</head>
+<body>
+    <h1>Reservas Canceladas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID do Hóspede</th>
+                <th>Nome do Hóspede</th>
+                <th>Telefone do Hóspede</th>
+                <th>Quarto</th>
+                <th>Tipo de Quarto</th>
+                <th>Data de Início</th>
+                <th>Data de Fim</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reserva, hospede, pessoa, quarto in reservas_canceladas %}
+            <tr>
+                <td>{{ reserva.idhospede }}</td>
+                <td>{{ pessoa.nome }}</td>
+                <td>{{ pessoa.telefone }}</td>
+                <td>{{ reserva.codquarto }}</td>
+                <td>{{ quarto.tipo_quarto }}</td>
+                <td>{{ reserva.datainicio.strftime('%d/%m/%Y') }}</td>
+                <td>{{ reserva.datafim.strftime('%d/%m/%Y') }}</td>
+                <td>{{ reserva.estado }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('index') }}">Voltar</a>
+</body>
+</html>

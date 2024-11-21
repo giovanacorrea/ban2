@@ -1,9 +1,3 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   font-family: 'Lato', Verdana, Geneva, Tahoma, sans-serif;
   background-color: #FFFF;
@@ -107,7 +101,7 @@ input[type="submit"] {
 }
 
 .form-container input,
-.form-container select{
+.form-container select {
   display: inline-block;
   width: 90%;
   padding: 10px;
@@ -148,84 +142,3 @@ input[type="submit"] {
 }
 
 
-.checkbox-container {
-  display: inline-block;
-  width: 90%;
-  padding: 10px;
-  margin-bottom: 20px; 
-  display: flex;
-  align-items: center;
-  
-}
-
-.checkbox-container input[type="checkbox"] {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #2D4759;
-  border-radius: 5px; /* Bordas arredondadas */
-  outline: none;
-  cursor: pointer;
-  position: relative;
-  margin-right: 10px; /* Espaçamento entre o checkbox e o label */
-  background-color: white;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-
-#selectedRooms {
-  box-sizing: border-box; 
-  width: 90%;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 20px;
-  cursor: pointer;
-  color: #2D4759;
-  font-size: 16px;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  max-height: 200px;
-  overflow-y: auto;
-  width: 100%;
-  z-index: 1;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.checkbox-option {
-  display: flex;
-  align-items: center;
-  padding: 5px 10px;
-}
-
-.checkbox-option input[type="checkbox"] {
-  margin-right: 10px;
-  width: 16px;
-  height: 16px;
-}
-
-.footer {
-  width: 100%;
-  position: flex; 
-  border: none;
-  margin-top: 8%;
-  padding: 2rem;
-  color: white;
-  font-weight: 500;
-  display: flex;
-  justify-content: center; 
-  align-items: center;
- gap: 0.2rem; 
- box-sizing: border-box; /* Garante que padding não afete a largura */
-
-}

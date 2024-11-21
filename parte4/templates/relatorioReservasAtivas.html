@@ -22,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for reserva, hospede, pessoa, quarto in reservas %}
+            {% for reserva, hospede, pessoa, quarto in reservas_ativas %}
             <tr>
                 <td>{{ reserva.idhospede }}</td>
                 <td>{{ pessoa.nome }}</td>

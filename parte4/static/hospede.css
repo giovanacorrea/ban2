@@ -77,6 +77,22 @@ input[type="submit"] {
   width: 100%;
   max-width: 1000px; /* Definindo uma largura máxima */
   margin: auto; /* Centralizando horizontalmente */
+}.submit-button {
+  display: block;
+  width: 30%;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 50px; /* Tornando as bordas mais arredondadas */
+  background-color: #2D4759; /* Alterando cor de fundo */
+  color: #FFF4ED; /* Alterando cor do texto */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Mudando a fonte */
+  border: 2px solid transparent; /* Adicionando borda transparente */
+  cursor: pointer;
+  margin: 8px 35% 0; /* Centralizando e adicionando espaço acima */
+}
+
+.submit-button:hover {
+  background-color: #2D4759; /* Cor de fundo do botão ao passar o mouse */
 }
 
 .form-section {

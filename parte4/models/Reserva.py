@@ -11,7 +11,7 @@ class Reserva(db.Model):
     estado = db.Column(db.String(100), nullable=False)
     datainicio = db.Column(db.Date, nullable=False)
     datafim = db.Column(db.Date, nullable=False)
-    valordesconto = db.Column(db.Integer, nullable=False, default=date.today)
+    valordesconto = db.Column(db.Integer, default=date.today)
     hospede = db.relationship('Hospedes', backref='reserva')
 
 

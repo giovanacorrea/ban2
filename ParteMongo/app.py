@@ -6,6 +6,7 @@ app = Flask(__name__)
 app.secret_key = 'minha_chave_secreta'  # Chave para mensagens flash
 
 # Configuração do MongoDB
+#app.config["MONGO_URI"] = "mongodb+srv://seu_usuario:sua_senha@cluster0.ryu6t.mongodb.net/"
 app.config["MONGO_URI"] = "mongodb+srv://debora:debora@cluster0.ryu6t.mongodb.net/"
 mongo = PyMongo(app)
 

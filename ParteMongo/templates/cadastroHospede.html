@@ -1,0 +1,73 @@
+{% extends "navHospede.html" %}
+
+
+<!DOCTYPE html>
+<html>
+    {% block content %}
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="static/hospede.css">
+        
+    </head>
+
+    <body id="body">
+        <img src="static/images/pousadaLogo-sfundo.png" alt="Logo">
+            <h2>Cadastro de Hóspede</h2>
+            <form id="userForm" action="/cadastrarHospede" method="POST">
+                <div class="form-section">
+                    <div class="form-container">
+                        <label for="nome">Nome:</label>
+                        <input type="text" id="nome" name="nome" placeholder="Insira seu nome aqui">
+                        
+                        <label for="telefone">Telefone:</label>
+                        <input type="text" id="telefone" name="telefone" placeholder="Ex: 999887766">
+                    </div>
+                    <div class="form-container">
+                        <label for="endereco">Endereço:</label>
+                        <input type="text" id="endereco" name="endereco" placeholder="Ex: rua x, num y">
+                        <label for="cpf">CPF:</label>
+                        <input type="number" id="cpf" name="cpf" placeholder="Ex: 12345678910">                      
+                    </div>
+                </div>
+                
+                <button type="button" onclick="adicionarAcompanhante()" id="add-acomp-button" class="submit-button">Adicionar Acompanhante</button>
+                <div id="acompanhantes-container"></div>
+                
+                <button type="submit" class="submit-button" id="submit-button">Enviar</button>
+                  <a href="/listar_hospedes" class="submit-button" id="submit-button">Lista de hóspedes</a>
+                
+            </form>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+                </form>
+                
+    <script>
+		function adicionarAcompanhante() {
+		    const acompanhantesContainer = document.getElementById('acompanhantes-container');
+		    const novoCampo = document.createElement('div');
+		    novoCampo.className = 'form-section';
+		    novoCampo.innerHTML = `
+                <div class='form-container'>
+		        <input type="text" name="acompanhante[]" placeholder="Nome do acompanhante" required>
+                </div>
+            </div>
+		    `;
+		    acompanhantesContainer.appendChild(novoCampo);
+		}
+	    </script>
+        <footer>
+            
+        </footer>
+    </body>
+
+
+    {% endblock %}
+
+</html>

@@ -10,31 +10,34 @@
     <h1>Reservas Ativas</h1>
     <table>
         <thead>
-            <tr>
-                <th>ID do Hóspede</th>
-                <th>Nome do Hóspede</th>
-                <th>Telefone do Hóspede</th>
-                <th>Quarto</th>
-                <th>Tipo de Quarto</th>
-                <th>Data de Início</th>
-                <th>Data de Fim</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for reserva, hospede, pessoa, quarto in reservas_ativas %}
-            <tr>
-                <td>{{ reserva.idhospede }}</td>
-                <td>{{ pessoa.nome }}</td>
-                <td>{{ pessoa.telefone }}</td>
-                <td>{{ reserva.codquarto }}</td>
-                <td>{{ quarto.tipo_quarto }}</td>
-                <td>{{ reserva.datainicio.strftime('%d/%m/%Y') }}</td>
-                <td>{{ reserva.datafim.strftime('%d/%m/%Y') }}</td>
-                <td>{{ reserva.estado }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+	    <tr>
+		<th>CPF</th>
+		<th>Nome do Hóspede</th>
+		<th>Quarto</th>
+		<th>Data de Início</th>
+		<th>Data de Fim</th>
+		<th>Estado</th>
+	    </tr>
+	</thead>
+	<tbody>
+	    {% for reserva in reservas_ativas %}
+		<tr>
+		    <td>{{ reserva['cpf_hospede'] }}</td>
+		    <td>
+		        {% if reserva['hospede_info'] %}
+		            {{ reserva['hospede_info'][0]['nome'] }}  <!-- Acessa o nome do hóspede -->
+		        {% else %}
+		            Não encontrado
+		        {% endif %}
+		    </td>
+		    <td>{{ reserva['numquarto'] }}</td>
+		    <td>{{ reserva['datainicio'] }}</td>
+		    <td>{{ reserva['datafim'] }}</td>
+		    <td>{{ reserva['estado'] }}</td>
+		</tr>
+	    {% endfor %}
+	</tbody>
+
     </table>
     <a href="{{ url_for('index') }}">Voltar</a>
 </body>

@@ -21,11 +21,13 @@
                 <input type="number" id="cupom" name="cupom">      
                 
                 <label for="numquarto">Número do quarto:</label>
-                <select id="numquarto" name="numquarto">
-                    -{% for quarto in quartos %}
-                        <option value="{{ quarto.codquarto }}">{{ quarto.codquarto }} - {{ quarto.tipo_quarto }}</option>
-                    {% endfor %}
-                </select>
+			<select id="numquarto" name="numquarto">
+			    <option value="" disabled selected>Selecione um quarto</option>
+			    {% for quarto in quartos %}
+				<option value="{{ quarto['numquarto'] }}">{{ quarto['numquarto'] }} - {{ quarto['tipo_quarto'] }}</option>
+			    {% endfor %}
+			</select>
+
             </div>
             <div class="form-container">
             	<label for= "dataEntrada">Data de entrada:</label>

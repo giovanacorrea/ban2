@@ -115,7 +115,20 @@ def CadastrarReserva():
     valordesconto = request.form.get('cupom')
 
     try:
-        # Inserir a reserva no banco de dados MongoDB
+        # Verificar se já existe uma reserva para o mesmo quarto no mesmo período
+        reserva_existente = db.reservas.find_one({
+            "numquarto": numquarto,
+            "$or": [
+                {"datainicio": {"$lt": datafim}},  # Data de início da nova reserva é antes do fim da existente
+                {"datafim": {"$gt": datainicio}}   # Data de fim da nova reserva é depois do início da existente
+            ]
+        })
+
+        if reserva_existente:
+            flash('Este quarto já está reservado para esse período.')
+            return redirect(url_for('reserva'))
+
+        # Caso contrário, insira a nova reserva no banco de dados
         db.reservas.insert_one({
             "cpf_hospede": cpf,
             "numquarto": numquarto,
@@ -214,4 +227,3 @@ def checkout2(idreserva):
 
 if __name__ == '__main__':
     app.run(debug=True)
-

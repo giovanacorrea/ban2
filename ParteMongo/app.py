@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from datetime import date
 from flask_pymongo import PyMongo
+from pymongo import MongoClient
 
 app = Flask(__name__)
 app.secret_key = 'minha_chave_secreta'  # Chave para mensagens flash
 
-# Configuração do MongoDB
-#app.config["MONGO_URI"] = "mongodb+srv://seu_usuario:sua_senha@cluster0.ryu6t.mongodb.net/"
-app.config["MONGO_URI"] = "mongodb+srv://debora:debora@cluster0.ryu6t.mongodb.net/"
-mongo = PyMongo(app)
+MONGO_URI = "mongodb+srv://debora:debora@cluster0.ryu6t.mongodb.net/pousada?retryWrites=true&w=majority"
+client = MongoClient(MONGO_URI)
+db = client['pousada']
 
 # Itens do frigobar e quantidade inicial
 ITENS_FRIGOBAR = ["água sem gás", "água com gás", "chocolate", "castanhas", "salgadinho"]
@@ -29,21 +29,37 @@ def cadastrarHospede():
     telefone = request.form.get('telefone')
     endereco = request.form.get('endereco')
 
-    # Inserir o hóspede no banco de dados MongoDB
-    mongo.db.hospede.insert_one({
-        "cpf": cpf,
-        "nome": nome,
-        "telefone": telefone,
-        "endereco": endereco
-    })
+    # Verifique se todos os campos foram preenchidos
+    if not all([cpf, nome, telefone, endereco]):
+        flash("Todos os campos são obrigatórios!")
+        return redirect(url_for('cadastroHospede'))
 
-    flash('Hóspede cadastrado com sucesso!')
+    try:
+        # Inserir o hóspede no banco de dados MongoDB
+        db.hospedes.insert_one({
+            "cpf": cpf,
+            "nome": nome,
+            "telefone": telefone,
+            "endereco": endereco
+        })
+        flash('Hóspede cadastrado com sucesso!')
+    except Exception as e:
+        flash(f"Erro ao cadastrar hóspede: {e}")
+
     return redirect(url_for('listar_hospedes'))
+
 
 
 @app.route('/listar_hospedes')
 def listar_hospedes():
-    hospedes = []  # Aqui seria feita a consulta no banco
+    try:
+        # Recupera todos os hóspedes da coleção 'hospedes'
+        hospedes = db.hospedes.find()
+        return render_template('listarHospedes.html', hospedes=hospedes)
+    except Exception as e:
+        flash(f"Erro ao listar hóspedes: {e}")
+        return redirect(url_for('index'))
+
     return render_template('listarHospedes.html', hospedes=hospedes)
 
 @app.route('/cadastrarQuarto')

@@ -35,7 +35,6 @@ def cadastrarHospede():
         return redirect(url_for('cadastroHospede'))
 
     try:
-        # Inserir o hóspede no banco de dados MongoDB
         db.hospedes.insert_one({
             "cpf": cpf,
             "nome": nome,
@@ -60,52 +59,128 @@ def listar_hospedes():
         flash(f"Erro ao listar hóspedes: {e}")
         return redirect(url_for('index'))
 
-    return render_template('listarHospedes.html', hospedes=hospedes)
-
 @app.route('/cadastrarQuarto')
 def cadastrarQuarto():
     return render_template('cadastrarQuarto.html')
 
 @app.route('/cadastroQuarto', methods=['POST'])
 def cadastroQuarto():
-    codquarto = request.form.get('numquarto')  
+    numquarto = request.form.get('numquarto')  
     tipo_quarto = request.form.get('tipoQuarto')
     qtdcamas = request.form.get('quantidadeCamas')
     preco = request.form.get('preco')
     descricao = request.form.get('descricao')
-    flash('Quarto cadastrado com sucesso!')
+
+    try:
+        db.quartos.insert_one({
+            "numquarto": numquarto,
+            "tipo_quarto": tipo_quarto,
+            "quantidade_camas": qtdcamas,
+            "preco": preco,
+            "descricao": descricao
+        })
+        flash('Quarto cadastrado com sucesso!')
+    except Exception as e:
+        flash(f"Erro ao cadastrar quarto: {e}")
+
     return redirect(url_for('cadastrarQuarto'))
+    
+@app.route('/listar_quartos')
+def listar_quartos():
+    try:
+        # Recupera todos os hóspedes da coleção 'hospedes'
+        quartos = db.quartos.find()
+        return render_template('listarQuartos.html', quartos=quartos)
+    except Exception as e:
+        flash(f"Erro ao listar quartos: {e}")
+        return redirect(url_for('index'))
 
 @app.route('/reserva')
 def reserva():
-    quartos = []  # Aqui seria feita a consulta no banco
-    return render_template('reserva.html', quartos=quartos)
+    try:
+        # Recupera todos os quartos cadastrados
+        quartos = db.quartos.find()
+        return render_template('reserva.html', quartos=quartos)
+    except Exception as e:
+        flash(f"Erro ao buscar quartos: {e}")
+        return redirect(url_for('index'))
 
 @app.route('/CadastrarReserva', methods=['POST'])
 def CadastrarReserva():
-    idhospede = request.form.get('cpf')
-    codquarto = request.form.get('numquarto')
+    cpf = request.form.get('cpf')
+    numquarto = request.form.get('numquarto')
     estado = request.form.get('estado')
     datainicio = request.form.get('datainicio')
     datafim = request.form.get('datafim')
     valordesconto = request.form.get('cupom')
-    flash('Reserva cadastrada com sucesso!')
-    return redirect(url_for('reserva'))
 
-@app.route('/listar_quartos')
-def listar_quartos():
-    quartos = []  # Aqui seria feita a consulta no banco
-    return render_template('listarQuartos.html', quartos=quartos)
+    try:
+        # Inserir a reserva no banco de dados MongoDB
+        db.reservas.insert_one({
+            "cpf_hospede": cpf,
+            "numquarto": numquarto,
+            "estado": estado,
+            "datainicio": datainicio,
+            "datafim": datafim,
+            "valordesconto": valordesconto
+        })
+        flash('Reserva cadastrada com sucesso!')
+    except Exception as e:
+        flash(f"Erro ao cadastrar reserva: {e}")
+
+    return redirect(url_for('reserva'))
 
 @app.route('/relatorioReservasAtivas')
 def relatorioReservasAtivas():
-    reservas_ativas = []  # Aqui seria feita a consulta no banco
-    return render_template('relatorioReservasAtivas.html', reservas_ativas=reservas_ativas)
+    try:
+        # Consulta no MongoDB para reservas ativas pagas
+        reservas_ativas = db.reservas.aggregate([
+            {
+                '$match': {
+                    'estado': 'pago'  # Filtra as reservas com estado "pago"
+                }
+            },
+            {
+                '$lookup': {
+                    'from': 'hospedes',  # Nome da coleção de hóspedes
+                    'localField': 'cpf_hospede',  # Campo em 'reservas'
+                    'foreignField': 'cpf',  # Campo correspondente em 'hospedes'
+                    'as': 'hospede_info'  # Campo de saída, com informações do hóspede
+                }
+            }
+        ])
+        
+        return render_template('relatorioReservasAtivas.html', reservas_ativas=reservas_ativas)
+    except Exception as e:
+        flash(f"Erro ao buscar reservas ativas: {e}")
+        return redirect(url_for('index'))
+
 
 @app.route('/relatorioReservasCanceladas')
 def relatorioReservasCanceladas():
-    reservas_canceladas = []  # Aqui seria feita a consulta no banco
-    return render_template('relatorioReservasCanceladas.html', reservas_canceladas=reservas_canceladas)
+    try:
+        # Consulta no MongoDB para reservas ativas pagas
+        reservas_canceladas = db.reservas.aggregate([
+            {
+                '$match': {
+                    'estado': 'naopago'  # Filtra as reservas com estado "pago"
+                }
+            },
+            {
+                '$lookup': {
+                    'from': 'hospedes',  # Nome da coleção de hóspedes
+                    'localField': 'cpf_hospede',  # Campo em 'reservas'
+                    'foreignField': 'cpf',  # Campo correspondente em 'hospedes'
+                    'as': 'hospede_info'  # Campo de saída, com informações do hóspede
+                }
+            }
+        ])
+        
+        return render_template('relatorioReservasCanceladas.html', reservas_canceladas=reservas_canceladas)
+    except Exception as e:
+        flash(f"Erro ao buscar reservas canceladas: {e}")
+        return redirect(url_for('index'))
+
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():

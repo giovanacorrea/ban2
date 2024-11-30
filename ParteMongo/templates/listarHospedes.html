@@ -12,6 +12,7 @@
     <table>
         <thead>
             <tr>
+             	<th>CPF</th>
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Endereço</th>
@@ -21,9 +22,10 @@
         <tbody>
             {% for hospede in hospedes %}
             <tr>
-                <td>{{ hospede.nome }}</td>
-                <td>{{ hospede.telefone }}</td>
-                <td>{{ hospede.endereco }}</td>
+                <td>{{ hospede['cpf'] }}</td>
+                <td>{{ hospede['nome'] }}</td>
+                <td>{{ hospede['telefone'] }}</td>
+                <td>{{ hospede['endereco'] }}</td>  
                 <td>
                     <button class="edit-btn">Alterar</button>
                     <button class="delete-btn">Deletar</button>

@@ -28,6 +28,8 @@ def cadastrarHospede():
     nome = request.form.get('nome')
     telefone = request.form.get('telefone')
     endereco = request.form.get('endereco')
+    acompanhantes = request.form.getlist('acompanhante[]')  
+
 
     # Verifique se todos os campos foram preenchidos
     if not all([cpf, nome, telefone, endereco]):
@@ -41,9 +43,16 @@ def cadastrarHospede():
             "telefone": telefone,
             "endereco": endereco
         })
-        flash('Hóspede cadastrado com sucesso!')
+        for acompanhante in acompanhantes:
+            print(acompanhante)
+            db.acompanhantes.insert_one({
+                "nome": acompanhante,
+                "hospede_id": cpf  # Relaciona ao hóspede principal
+            })
+
+        flash('Hóspede e acompanhantes cadastrados com sucesso!')
     except Exception as e:
-        flash(f"Erro ao cadastrar hóspede: {e}")
+        flash(f"Erro ao cadastrar hóspede e acompanhantes: {e}")
 
     return redirect(url_for('listar_hospedes'))
 

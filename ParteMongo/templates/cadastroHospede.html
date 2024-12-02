@@ -23,50 +23,89 @@
                         <input type="text" id="telefone" name="telefone" placeholder="Ex: 999887766">
                     </div>
                     <div class="form-container">
-                        <label for="endereco">Endereço:</label>
-                        <input type="text" id="endereco" name="endereco" placeholder="Ex: rua x, num y">
-                        <label for="cpf">CPF:</label>
-                        <input type="number" id="cpf" name="cpf" placeholder="Ex: 12345678910">                      
+                        <h3>Consumo de Frigobar</h3>
+                        <form action="{{ url_for('checkout2', idreserva=reserva_info['_id']) }}" method="POST">
+                            <input type="hidden" name="idreserva" value="{{ reserva_info['_id'] }}">
+                            
+                            <label for="aguasgas">Água sem gás (R$5,00)
+                                <input type="number" id="aguasgas" name="aguasgas" min="0" required>
+                            </label>
+                    
+                            <label for="aguacgas">Água com gás (R$6,00)
+                                <input type="number" id="aguacgas" name="aguacgas" min="0" required>
+                            </label>
+                    
+                            <label for="chocolate">Chocolate (R$10,00)
+                                <input type="number" id="chocolate" name="chocolate" min="0" required>
+                            </label>
+                    
+                            <label for="castanhas">Castanhas (R$12,00)
+                                <input type="number" id="castanhas" name="castanhas" min="0" required>
+                            </label>
+                    
+                            <label for="salgadinho">Salgadinho (R$8,00)
+                                <input type="number" id="salgadinho" name="salgadinho" min="0" required>
+                            </label>
+                    
+                            <button type="button" onclick="calcularValorTotal()">Calcular Total</button>
+                            <button type="submit" class="submit-button">Registrar Consumo</button>
+                        </form>             
                     </div>
-                </div>
-                
-                <button type="button" onclick="adicionarAcompanhante()" id="add-acomp-button" class="submit-button">Adicionar Acompanhante</button>
-                <div id="acompanhantes-container"></div>
-                
-                <button type="submit" class="submit-button" id="submit-button">Enviar</button>
-                  <a href="/listar_hospedes" class="submit-button" id="submit-button">Lista de hóspedes</a>
-                
-            </form>
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <ul>
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
-                </form>
-                
-    <script>
-		function adicionarAcompanhante() {
-		    const acompanhantesContainer = document.getElementById('acompanhantes-container');
-		    const novoCampo = document.createElement('div');
-		    novoCampo.className = 'form-section';
-		    novoCampo.innerHTML = `
-                <div class='form-container'>
-		        <input type="text" name="acompanhante[]" placeholder="Nome do acompanhante" required>
-                </div>
-            </div>
-		    `;
-		    acompanhantesContainer.appendChild(novoCampo);
-		}
-	    </script>
-        <footer>
-            
-        </footer>
-    </body>
-
+                    
+                    <div>
+                        <h4>Valor Total:</h4>
+                        <p id="valor-total">R$ 0.00</p>
+                    </div>
+                    
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <script>
+                        function calcularValorTotal() {
+                            const diaria = parseFloat("{{ quarto_info['preco']|default(0) }}"); 
+                            const precosFrigobar = {
+                                aguasgas: 5.0,
+                                aguacgas: 6.0,
+                                chocolate: 10.0,
+                                castanhas: 12.0,
+                                salgadinho: 8.0
+                            };
+                    
+                            const aguasgas = parseInt(document.getElementById("aguasgas").value) || 0;
+                            const aguacgas = parseInt(document.getElementById("aguacgas").value) || 0;
+                            const chocolate = parseInt(document.getElementById("chocolate").value) || 0;
+                            const castanhas = parseInt(document.getElementById("castanhas").value) || 0;
+                            const salgadinho = parseInt(document.getElementById("salgadinho").value) || 0;
+                    
+                            const totalFrigobar = (aguasgas * precosFrigobar.aguasgas) +
+                                                  (aguacgas * precosFrigobar.aguacgas) +
+                                                  (chocolate * precosFrigobar.chocolate) +
+                                                  (castanhas * precosFrigobar.castanhas) +
+                                                  (salgadinho * precosFrigobar.salgadinho);
+                    
+                            const dataInicio = new Date("{{ reserva_info['datainicio'] }}");
+                            const dataFim = new Date("{{ reserva_info['datafim'] }}");
+                    
+                            const diffTime = dataFim - dataInicio;
+                            const numDias = diffTime / (1000 * 3600 * 24);
+                    
+                            const totalHospedagem = numDias * diaria;
+                    
+                            const desconto = parseFloat("{{ reserva_info.get('valordesconto', 0) }}");
+                    
+                            const valorTotal = totalHospedagem + totalFrigobar - desconto;
+                    
+                            document.getElementById("valor-total").innerText = "R$ " + valorTotal.toFixed(2);
+                        }
+                    </script>
+                    
 
     {% endblock %}
 
